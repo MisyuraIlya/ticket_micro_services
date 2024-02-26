@@ -10,13 +10,14 @@ const router = express.Router();
 
 router.post('/api/users/signin', 
 [
-    body('emai').isEmail().withMessage('Email must be valid'),
+    body('email').isEmail().withMessage('Email must be valid'),
     body('password').trim().notEmpty().withMessage('You must supply a password')
 ],
 validateRequest,
 async (req: Request, res: Response) => {
     const {email, password} = req.body;
     const existingUser = await User.findOne({email})
+    console.log(email, password)
     if(!existingUser) throw new BadRequestError('Invalid credentials');
 
     const passwordsMath = await Password.compare(
@@ -39,7 +40,7 @@ async (req: Request, res: Response) => {
         jwt: userJwt
     };
 
-    res.status(201).send(existingUser);
+    res.status(200).send(existingUser);
 });
 
 export { router as signinRouter };
