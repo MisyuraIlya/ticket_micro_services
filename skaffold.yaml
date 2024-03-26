@@ -16,3 +16,12 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+
+    - image: spetsar/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync: 
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
