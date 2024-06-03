@@ -25,3 +25,14 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+
+    - image: spetsar/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync: 
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+
+            

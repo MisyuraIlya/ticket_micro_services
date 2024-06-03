@@ -17,7 +17,6 @@ validateRequest,
 async (req: Request, res: Response) => {
     const {email, password} = req.body;
     const existingUser = await User.findOne({email})
-    console.log(email, password)
     if(!existingUser) throw new BadRequestError('Invalid credentials');
 
     const passwordsMath = await Password.compare(
@@ -35,10 +34,10 @@ async (req: Request, res: Response) => {
         process.env.JWT_KEY!
     );
 
-    //store it on session object
     req.session = {
         jwt: userJwt
     };
+
 
     res.status(200).send(existingUser);
 });
