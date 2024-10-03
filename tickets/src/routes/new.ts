@@ -13,6 +13,7 @@ router.post('/api/tickets', requireAuth,
     ],
      validateRequest , 
     async (req: Request, res: Response) => {
+    console.log('here')
     const { title, price} = req.body
 
     const ticket = Ticket.build({

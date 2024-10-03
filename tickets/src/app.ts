@@ -13,10 +13,11 @@ app.set('trust proxy',true);
 app.use(json());
 app.use(
     cookieSession({
-        signed: false,
-        secure: process.env.NODE_ENV !== 'test'
+        signed: false, // true if you want to sign cookies
+        secure: process.env.NODE_ENV !== 'test', // use secure cookies in production
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
     })
-)
+);
 
 app.use(currentUser)
 app.use(showTicketRouter)
