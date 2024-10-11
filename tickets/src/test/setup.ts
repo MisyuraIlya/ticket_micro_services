@@ -12,6 +12,8 @@ declare global {
     }
 }
   
+jest.mock('../nats-wrapper');
+
 let mongo: MongoMemoryServer;
 beforeAll(async () => {
     process.env.JWT_KEY = 'asdasd';
