@@ -1,7 +1,10 @@
 name: tickets-orders
 
 on:
-  pull_request
+  pull_request:
+    paths:
+      - 'tickets/**'
+
 
 jobs:
   build:
