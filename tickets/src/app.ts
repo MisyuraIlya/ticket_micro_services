@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
 import 'express-async-errors';
 import {json} from 'body-parser'
 import { errorHandler, NotFoundError, currentUser } from '@spetsartickets/common';
@@ -28,6 +28,6 @@ app.use(updateTicketRouter)
 app.all('*', async  () => {
     throw new NotFoundError()
 });
-app.use(errorHandler);
+app.use(errorHandler as ErrorRequestHandler);
 
 export {app}

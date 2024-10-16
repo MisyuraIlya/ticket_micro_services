@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 import 'express-async-errors';
 import {json} from 'body-parser'
 import { currentUserRouter } from './routes/current-user';
@@ -25,6 +25,7 @@ app.use(signupRouter);
 app.all('*', async  () => {
     throw new NotFoundError()
 });
-app.use(errorHandler);
-
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    errorHandler(err, req, res, next);  
+});
 export {app}
