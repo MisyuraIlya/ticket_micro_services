@@ -6,7 +6,6 @@ import { TicketUpdatedListener } from './events/listeners/ticket-updated-listene
 import { ExpirationCompleteListener } from './events/listeners/expiration-complete-listener';
 import { PaymentCreatedListener } from './events/listeners/payment-created-listener';
 
-// Retry logic for NATS connection
 const connectNATSWithRetry = async () => {
   let retries = 5;
   while (retries) {
@@ -17,11 +16,11 @@ const connectNATSWithRetry = async () => {
         process.env.NATS_URL!
       );
       console.log('Connected to NATS');
-      break; // Break the loop if connection is successful
+      break; 
     } catch (err) {
       retries -= 1;
       console.log(`Retrying NATS connection (${5 - retries}/5)`, err);
-      await new Promise((res) => setTimeout(res, 5000)); // Wait 5 seconds before retrying
+      await new Promise((res) => setTimeout(res, 5000));
     }
   }
 
@@ -30,18 +29,17 @@ const connectNATSWithRetry = async () => {
   }
 };
 
-// Retry logic for MongoDB connection
 const connectMongoDBWithRetry = async () => {
   let retries = 5;
   while (retries) {
     try {
       await mongoose.connect(process.env.MONGO_URI!);
       console.log('Connected to MongoDB');
-      break; // Break the loop if connection is successful
+      break;
     } catch (err) {
       retries -= 1;
       console.log(`Retrying MongoDB connection (${5 - retries}/5)`, err);
-      await new Promise((res) => setTimeout(res, 5000)); // Wait 5 seconds before retrying
+      await new Promise((res) => setTimeout(res, 5000)); 
     }
   }
 
@@ -68,10 +66,7 @@ const start = async () => {
   }
 
   try {
-    // Attempt to connect to NATS with retries
     await connectNATSWithRetry();
-    
-    // Handle NATS client close events
     natsWrapper.client.on('close', () => {
       console.log('NATS connection closed!');
       process.exit();
@@ -79,20 +74,16 @@ const start = async () => {
     process.on('SIGINT', () => natsWrapper.client.close());
     process.on('SIGTERM', () => natsWrapper.client.close());
 
-    // Initialize NATS listeners
     new TicketCreatedListener(natsWrapper.client).listen();
     new TicketUpdatedListener(natsWrapper.client).listen();
     new ExpirationCompleteListener(natsWrapper.client).listen();
     new PaymentCreatedListener(natsWrapper.client).listen();
-
-    // Attempt to connect to MongoDB with retries
     await connectMongoDBWithRetry();
     
   } catch (err) {
     console.error('Failed to start the service:', err);
   }
 
-  // Start listening on port 3000 after all connections are successful
   app.listen(3000, () => {
     console.log('Listening on port 3000');
   });
