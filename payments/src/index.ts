@@ -90,7 +90,7 @@ const start = async () => {
 
   // Start listening on port 3000 after all connections are successful
   app.listen(3000, () => {
-    console.log('Listening on port 3000!');
+    console.log('Listening on port 3000!!');
   });
 };
 
